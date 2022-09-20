@@ -7,6 +7,8 @@ using PayCoreFinalProject.Service.OfferService.Abstract;
 using PayCoreFinalProject.Service.OfferService.Concrete;
 using PayCoreFinalProject.Service.ProductService.Abstract;
 using PayCoreFinalProject.Service.ProductService.Concrete;
+using PayCoreFinalProject.Service.RabbitMQ.Abstract;
+using PayCoreFinalProject.Service.RabbitMQ.Concrete;
 using PayCoreFinalProject.Service.RegisterService.Abstract;
 using PayCoreFinalProject.Service.RegisterService.Concrete;
 using PayCoreFinalProject.Service.Token.Abstract;
@@ -41,6 +43,7 @@ public static class ExtensionService
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IOfferService, OfferService>();
+        services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
         services.AddHttpContextAccessor();
 
 

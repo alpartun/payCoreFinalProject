@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayCoreFinalProject.Dto", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayCoreFinalProject.Service", "PayCoreFinalProject.Service\PayCoreFinalProject.Service.csproj", "{347A4B03-5890-4079-94F2-826C92342679}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayCoreFinalProject.RabbitMQ.Consumer", "PayCoreFinalProject.RabbitMQ.Consumer\PayCoreFinalProject.RabbitMQ.Consumer.csproj", "{01AED526-E127-475F-B200-786267B27CFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{347A4B03-5890-4079-94F2-826C92342679}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{347A4B03-5890-4079-94F2-826C92342679}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{347A4B03-5890-4079-94F2-826C92342679}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01AED526-E127-475F-B200-786267B27CFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01AED526-E127-475F-B200-786267B27CFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01AED526-E127-475F-B200-786267B27CFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01AED526-E127-475F-B200-786267B27CFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
