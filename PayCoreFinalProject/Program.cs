@@ -4,6 +4,7 @@ using PayCoreFinalProject.StartUpExtension;
 
 var builder = WebApplication.CreateBuilder(args);
 
+MyOptions.env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 // Add services to the container.
 
 
@@ -12,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//handle circle loop
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
@@ -52,5 +54,6 @@ app.Run();
 class MyOptions
 {
     public static JwtConfig JwtConfig { get; set; }
-    
+    public static string env { get; set; }
+
 }

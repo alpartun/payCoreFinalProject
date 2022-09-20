@@ -13,9 +13,12 @@ public class RegisterController : ControllerBase
         _register = register;
 
     }
-    [HttpPost("Register")]
+    
+    // Register operation
+    [HttpPost()]
     public IActionResult Register([FromBody] UserRegisterDto userRegister)
     {
+        // Send request to Service/RegisterService
         var result = _register.Register(userRegister);
         return Ok(result);
     }

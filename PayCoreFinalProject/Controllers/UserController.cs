@@ -8,7 +8,6 @@ using ISession = NHibernate.ISession;
 
 namespace PayCoreFinalProject.Controllers;
 [Authorize]
-
 [ApiController]
 [Route("[controller]")]
 public class UserController : ControllerBase

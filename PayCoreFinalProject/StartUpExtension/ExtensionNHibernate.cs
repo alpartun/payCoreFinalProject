@@ -8,6 +8,7 @@ namespace PayCoreFinalProject.StartUpExtension;
 
 public static class ExtensionNHibernate
 {
+    // NHibernate 
     public static IServiceCollection AddNHibernatePostgreSql(this IServiceCollection services, string connectionString)
     {
         var mapper = new ModelMapper();

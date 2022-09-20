@@ -9,14 +9,17 @@ namespace PayCoreFinalProject.Controllers;
 public class TokenController : ControllerBase
 {
     private readonly ITokenService _tokenService;
+    // token service injection
     public TokenController(ITokenService tokenService)
     {
         _tokenService = tokenService;
     }
 
     [HttpPost("Login")]
+    
     public BaseResponse<TokenResponse> Login([FromBody] TokenRequest tokenRequest)
     {
+        //call tokenservice and generate method
         var response = _tokenService.GenerateToken(tokenRequest);
         return response;
     }

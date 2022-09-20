@@ -6,6 +6,7 @@ namespace PayCoreFinalProject.StartUpExtension;
 
 public static class ExtensionCustomizeAuthentication
 {
+    //JWT Bearer Authentication service
     public static void AddJwtBearerAuthentication(this IServiceCollection services)
     {
         services.AddAuthentication(x =>

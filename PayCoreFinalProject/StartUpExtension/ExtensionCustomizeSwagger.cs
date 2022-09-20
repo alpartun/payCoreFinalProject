@@ -6,6 +6,7 @@ namespace PayCoreFinalProject.StartUpExtension;
 
     public static  class ExtensionCustomizeSwagger
     {
+        //Customize swagger for jwt token
         public static void AddCustomizeSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
@@ -15,7 +16,7 @@ namespace PayCoreFinalProject.StartUpExtension;
 
                 var securityScheme = new OpenApiSecurityScheme
                 {
-                    Name = "Pyc Management for IT Company",
+                    Name = "PayCore Final Project",
                     Description = "Enter JWT Bearer token *only*",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,

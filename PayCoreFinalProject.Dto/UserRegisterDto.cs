@@ -4,6 +4,7 @@ namespace PayCoreFinalProject.Dto;
 
 public class UserRegisterDto
 {
+    //required fields and some rules for registration
     [Required(ErrorMessage = "Name is required")]
     public string Name { get; set; }
     [Required(ErrorMessage = "Surname is required")]
