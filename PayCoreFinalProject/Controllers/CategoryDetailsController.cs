@@ -23,6 +23,10 @@ public class CategoryDetailsController : ControllerBase
     public IActionResult GetAll()
     {
         var results = _category.GetAllCategories();
+        if (results.Success == false)
+        {
+            return BadRequest(results.Message);
+        }
 
         return Ok(results);
     }
@@ -32,6 +36,10 @@ public class CategoryDetailsController : ControllerBase
     public IActionResult GetById(int id)
     {
         var result = _category.GetById(id);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
 
         return Ok(result);
     }
@@ -40,6 +48,10 @@ public class CategoryDetailsController : ControllerBase
     public IActionResult Create(CategoryRequest categoryRequest)
     {
         var result = _category.Create(categoryRequest);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
 
         return Ok(result.Message);
 
@@ -49,6 +61,10 @@ public class CategoryDetailsController : ControllerBase
     public IActionResult Update(int id, CategoryRequest categoryRequest)
     {
         var entity = _category.Edit(id, categoryRequest);
+        if (entity.Success == false)
+        {
+            return BadRequest(entity.Message);
+        }
         return Ok(entity);
     }
     // delete category
@@ -57,6 +73,10 @@ public class CategoryDetailsController : ControllerBase
     {
         var currentUserId = GetCurrentUserId();
         var entity = _category.Delete(id,currentUserId);
+        if (entity.Success == false)
+        {
+            return BadRequest(entity.Message);
+        }
 
         return Ok(entity);
     }

@@ -11,6 +11,7 @@ using PayCoreFinalProject.Base.Token;
 using PayCoreFinalProject.Data.Model;
 using PayCoreFinalProject.Data.Repository;
 using PayCoreFinalProject.Service.Token.Abstract;
+using Serilog;
 
 namespace PayCoreFinalProject.Service.Token.Concrete;
 
@@ -73,6 +74,8 @@ public class TokenService : ITokenService
         }
         catch (Exception e)
         {
+            Log.Error("TokenService.GenerateToken", e);
+
 
             return new BaseResponse<TokenResponse>(e.Message);
         }

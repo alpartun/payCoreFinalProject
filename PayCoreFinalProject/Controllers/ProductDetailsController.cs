@@ -26,6 +26,10 @@ public class ProductDetailsController : Controller
     public IActionResult GetAllProducts()
     {
         var results = _productService.GetAllProducts();
+        if (results.Success == false)
+        {
+            return BadRequest(results.Message);
+        }
 
         return Ok(results);
     }
@@ -35,6 +39,10 @@ public class ProductDetailsController : Controller
     {
 
         var result = _productService.GetById(id);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
 
         return Ok(result);
     }
@@ -44,6 +52,10 @@ public class ProductDetailsController : Controller
     {
         var currentUserId = GetCurrentUserId();
         var results = _productService.OfferableProducts(currentUserId);
+        if (results.Success == false)
+        {
+            return BadRequest(results.Message);
+        }
 
         return Ok(results);
     }
@@ -53,6 +65,10 @@ public class ProductDetailsController : Controller
     {
         var currentUserId = GetCurrentUserId();
         var result = _productService.OfferableProductsByCategoryId(id, currentUserId);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
         return Ok(result);
     }
         
@@ -61,6 +77,10 @@ public class ProductDetailsController : Controller
     {
         var currentUserId = GetCurrentUserId();
         var entity = _productService.Create(productRequest, currentUserId);
+        if (entity.Success == false)
+        {
+            return BadRequest(entity.Message);
+        }
         return Ok(entity.Message);
     }
     
@@ -70,6 +90,10 @@ public class ProductDetailsController : Controller
         var currentUserId = GetCurrentUserId();
         productRequest.Id = productId;
         var entity = _productService.Edit(productId,productRequest, currentUserId);
+        if (entity.Success == false)
+        {
+            return BadRequest(entity.Message);
+        }
         return Ok(entity.Message);
     }
 
@@ -77,6 +101,10 @@ public class ProductDetailsController : Controller
     public IActionResult Delete(int id)
     {
         var entity = _productService.Remove(id);
+        if (entity.Success == false)
+        {
+            return BadRequest(entity.Message);
+        }
 
         return Ok(entity);
     }
@@ -88,6 +116,10 @@ public class ProductDetailsController : Controller
         
         // order is an offer so this one goes to OfferService.
         var result = _offerService.Order(productId, currentUserId);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
 
         return Ok(result.Message);
     }
@@ -99,6 +131,10 @@ public class ProductDetailsController : Controller
         
         // SendOffer is in OfferService.
         var result = _offerService.SendOffer(productId, price, currentUserId);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
         return Ok(result.Message);
 
     }
@@ -110,6 +146,10 @@ public class ProductDetailsController : Controller
         var currentUserId = GetCurrentUserId();
         // AcceptOffer is in OfferService.
         var result = _offerService.AcceptOffer(offerId, currentUserId);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
         return Ok(result.Message);
     }
     // reject offer
@@ -120,6 +160,10 @@ public class ProductDetailsController : Controller
         
         // RejectOffer is in OfferService.
         var result = _offerService.RejectOffer(offerId, currentUserId);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
         return Ok(result.Message);
     }
 

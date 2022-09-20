@@ -7,6 +7,7 @@ using PayCoreFinalProject.Data.Repository;
 using PayCoreFinalProject.Dto;
 using PayCoreFinalProject.Service.Base.Concrete;
 using PayCoreFinalProject.Service.CategoryService.Abstract;
+using Serilog;
 
 namespace PayCoreFinalProject.Service.CategoryService.Concrete;
 
@@ -44,6 +45,8 @@ public class CategoryService : BaseService<CategoryDto,Category>,ICategoryServic
         }
         catch (Exception e)
         {
+            Log.Error("CategoryService.Create", e);
+
             // if something went wrong then rollback
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
@@ -72,6 +75,8 @@ public class CategoryService : BaseService<CategoryDto,Category>,ICategoryServic
         }
         catch (Exception e)
         {
+            Log.Error("CategoryService.Edit", e);
+
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
             return new BaseResponse<CategoryResponse>(e.Message);
@@ -103,12 +108,10 @@ public class CategoryService : BaseService<CategoryDto,Category>,ICategoryServic
             {
                 _offerHibernateRepository.Delete(deleteOfferId);
             }
-            _offerHibernateRepository.Commit();
             foreach (var deleteProductId in deleteProducts)
             {
                 _productHibernateRepository.Delete(deleteProductId);
             }
-            _productHibernateRepository.Commit();
             _hibernateRepository.Delete(deleteCategory.Id);
             _hibernateRepository.Commit();
             _hibernateRepository.CloseTransaction();
@@ -118,6 +121,8 @@ public class CategoryService : BaseService<CategoryDto,Category>,ICategoryServic
         }
         catch (Exception e)
         {
+            Log.Error("CategoryService.Delete", e);
+
             _offerHibernateRepository.Rollback();
             _productHibernateRepository.Rollback();
             _hibernateRepository.Rollback();

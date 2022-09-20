@@ -26,6 +26,10 @@ public class UserAccountDetailsController : ControllerBase
     public IActionResult GetOfferById(int id)
     {
         var result = _offerService.GetById(id);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
         return Ok(result);
     }
 
@@ -37,6 +41,10 @@ public class UserAccountDetailsController : ControllerBase
         //get current id method and returns userId claim
         var currentUserId = GetCurrentUserId();
         var result = _offerService.GetAllMyOffers(currentUserId);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
 
         return Ok(result);
     }
@@ -46,6 +54,10 @@ public class UserAccountDetailsController : ControllerBase
     {
         var currentUserId = GetCurrentUserId();
         var result = _productService.GetAllMyProductOffers(currentUserId);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
 
         return Ok(result);
         
@@ -56,6 +68,10 @@ public class UserAccountDetailsController : ControllerBase
     {
         var currentUserId = GetCurrentUserId();
         var entity = _offerService.OrdersGetAll(currentUserId);
+        if (entity.Success == false)
+        {
+            return BadRequest(entity.Message);
+        }
 
         return Ok(entity);
     }
@@ -65,6 +81,10 @@ public class UserAccountDetailsController : ControllerBase
     {
         var currentUserId = GetCurrentUserId();
         var entity = _offerService.SoldProductsGetAll(currentUserId);
+        if (entity.Success == false)
+        {
+            return BadRequest(entity.Message);
+        }
 
         return Ok(entity);
     }
@@ -75,6 +95,10 @@ public class UserAccountDetailsController : ControllerBase
     {
         var currentUser = GetCurrentUserId();
         var entity = _offerService.UpdateOffer(offerRequest, currentUser);
+        if (entity.Success == false)
+        {
+            return BadRequest(entity.Message);
+        }
 
         return Ok(entity.Message);
     }
@@ -83,6 +107,10 @@ public class UserAccountDetailsController : ControllerBase
     public IActionResult DeleteOffer(int offerId)
     {
         var result = _offerService.Remove(offerId);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
 
         return Ok(result.Message);
     }

@@ -1,11 +1,34 @@
 ﻿using System.Configuration;
 using PayCoreFinalProject.Base.Jwt;
 using PayCoreFinalProject.StartUpExtension;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
 
 MyOptions.env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 // Add services to the container.
+
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{MyOptions.env}.json", optional: true)
+    .Build();
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
+    .CreateLogger();
+
+try
+{
+    Log.Information(("Application starting..."));
+}
+catch (Exception e)
+{
+    Console.WriteLine(e);
+    throw;
+}
+
+
 
 
 builder.Services.AddControllers();
@@ -43,6 +66,7 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
@@ -55,5 +79,7 @@ class MyOptions
 {
     public static JwtConfig JwtConfig { get; set; }
     public static string env { get; set; }
+
+
 
 }

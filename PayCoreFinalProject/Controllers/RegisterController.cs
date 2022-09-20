@@ -20,6 +20,10 @@ public class RegisterController : ControllerBase
     {
         // Send request to Service/RegisterService
         var result = _register.Register(userRegister);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
         return Ok(result);
     }
     

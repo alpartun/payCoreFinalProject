@@ -8,6 +8,7 @@ using PayCoreFinalProject.Data.Repository;
 using PayCoreFinalProject.Dto;
 using PayCoreFinalProject.Service.Base.Concrete;
 using PayCoreFinalProject.Service.ProductService.Abstract;
+using Serilog;
 
 namespace PayCoreFinalProject.Service.ProductService.Concrete;
 
@@ -58,6 +59,8 @@ public class ProductService : BaseService<ProductDto,Product>, IProductService
         }
         catch (Exception e)
         {
+            Log.Error("ProductService.Create", e);
+
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
             return new BaseResponse<ProductResponse>(e.Message);
@@ -109,6 +112,8 @@ public class ProductService : BaseService<ProductDto,Product>, IProductService
         }
         catch (Exception e)
         {
+            Log.Error("ProductService.Edit", e);
+
             _offerHibernateRepository.Rollback();
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
@@ -152,6 +157,8 @@ public class ProductService : BaseService<ProductDto,Product>, IProductService
         }
         catch (Exception e)
         {
+            Log.Error("ProductService.Delete", e);
+
             _offerHibernateRepository.Rollback();
             _offerHibernateRepository.CloseTransaction();
             _hibernateRepository.Rollback();
@@ -219,6 +226,8 @@ public class ProductService : BaseService<ProductDto,Product>, IProductService
         }
         catch (Exception e)
         {
+            Log.Error("ProductService.GetAllProducts", e);
+
             return new BaseResponse<IEnumerable<ProductDto>>(e.Message);
         }
     }

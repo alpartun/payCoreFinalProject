@@ -8,6 +8,7 @@ using PayCoreFinalProject.Data.Repository;
 using PayCoreFinalProject.Dto;
 using PayCoreFinalProject.Service.Base.Concrete;
 using PayCoreFinalProject.Service.OfferService.Abstract;
+using Serilog;
 
 namespace PayCoreFinalProject.Service.OfferService.Concrete;
 
@@ -72,6 +73,8 @@ public class OfferService : BaseService<OfferDto,Offer>, IOfferService
         }
         catch (Exception e)
         {
+            Log.Error("OfferService.Order", e);
+
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
             return new BaseResponse<Offer>(e.Message);
@@ -129,6 +132,8 @@ public class OfferService : BaseService<OfferDto,Offer>, IOfferService
         }
         catch (Exception e)
         {
+            Log.Error("OfferService.SendOffer", e);
+
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
             return new BaseResponse<Offer>(e.Message);
@@ -158,6 +163,8 @@ public class OfferService : BaseService<OfferDto,Offer>, IOfferService
         }
         catch (Exception e)
         {
+            Log.Error("OfferService.AcceptOffer", e);
+
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
             return new BaseResponse<Offer>(e.Message);
@@ -194,6 +201,8 @@ public class OfferService : BaseService<OfferDto,Offer>, IOfferService
         }
         catch (Exception e)
         {
+            Log.Error("OfferService.RejectOffer", e);
+
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
             return new BaseResponse<Offer>(e.Message);
@@ -264,6 +273,7 @@ public class OfferService : BaseService<OfferDto,Offer>, IOfferService
         }
         catch (Exception e)
         {
+            Log.Error("OfferService.UpdateOffer", e);
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
             return new BaseResponse<OfferResponse>(e.Message);

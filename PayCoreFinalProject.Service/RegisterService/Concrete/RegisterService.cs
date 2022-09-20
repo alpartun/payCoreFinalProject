@@ -6,6 +6,7 @@ using PayCoreFinalProject.Data.Model;
 using PayCoreFinalProject.Data.Repository;
 using PayCoreFinalProject.Dto;
 using PayCoreFinalProject.Service.RegisterService.Abstract;
+using Serilog;
 
 namespace PayCoreFinalProject.Service.RegisterService.Concrete;
 
@@ -72,6 +73,8 @@ namespace PayCoreFinalProject.Service.RegisterService.Concrete;
             }
             catch (Exception e)
             {
+                Log.Error("RegisterService.GenerateToken", e);
+
                 // if some error has occurs then rollback and send failed message
                 _hibernateRepository.Rollback();
                 _hibernateRepository.CloseTransaction();

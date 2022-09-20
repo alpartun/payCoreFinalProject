@@ -3,6 +3,7 @@ using NHibernate;
 using PayCoreFinalProject.Base.Response;
 using PayCoreFinalProject.Data.Repository;
 using PayCoreFinalProject.Service.Base.Abstract;
+using Serilog;
 
 namespace PayCoreFinalProject.Service.Base.Concrete;
 
@@ -28,12 +29,13 @@ public abstract class BaseService<Dto,Entity> : IBaseService<Dto,Entity> where E
             var result = _mapper.Map<Entity, Dto>(tempEntity);
             if (result == null)
             {
-                return new BaseResponse<Dto>("User not found.");
+                return new BaseResponse<Dto>($"{typeof(Entity)} not found.");
             }
             return new BaseResponse<Dto>(result);
         }
         catch (Exception e)
         { 
+            Log.Error("BaseService.GetById", e);
             return new BaseResponse<Dto>(e.Message);
         }
     }
@@ -48,6 +50,7 @@ public abstract class BaseService<Dto,Entity> : IBaseService<Dto,Entity> where E
         }
         catch (Exception e)
         {
+            Log.Error("BaseService.GetAll", e);
             return new BaseResponse<IEnumerable<Dto>>(e.Message);
         }
     }
@@ -67,6 +70,7 @@ public abstract class BaseService<Dto,Entity> : IBaseService<Dto,Entity> where E
         }
         catch (Exception e)
         {
+            Log.Error("BaseService.Insert", e);
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
             return new BaseResponse<Dto>(e.Message);
@@ -92,6 +96,8 @@ public abstract class BaseService<Dto,Entity> : IBaseService<Dto,Entity> where E
         }
         catch (Exception e)
         {
+            Log.Error("BaseService.Update", e);
+
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
             return new BaseResponse<Dto>(e.Message);
@@ -118,6 +124,8 @@ public abstract class BaseService<Dto,Entity> : IBaseService<Dto,Entity> where E
         }
         catch (Exception e)
         { 
+            Log.Error("BaseService.Remove", e);
+
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
             return new BaseResponse<Dto>(e.Message);

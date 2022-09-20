@@ -17,11 +17,15 @@ public class TokenController : ControllerBase
 
     [HttpPost("Login")]
     
-    public BaseResponse<TokenResponse> Login([FromBody] TokenRequest tokenRequest)
+    public IActionResult Login([FromBody] TokenRequest tokenRequest)
     {
         //call tokenservice and generate method
         var response = _tokenService.GenerateToken(tokenRequest);
-        return response;
+        if (response.Success == false)
+        {
+            return BadRequest(response.Message);
+        }
+        return Ok(response);
     }
 
 }

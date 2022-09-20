@@ -23,6 +23,10 @@ public class UserController : ControllerBase
     public IActionResult GetAll()
     {
         var result = _userService.GetAll();
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
         return Ok(result);
     }
 
@@ -31,6 +35,10 @@ public class UserController : ControllerBase
     public IActionResult GetById(int id)
     {
         var result = _userService.GetById(id);
+        if (result.Success == false)
+        {
+            return BadRequest(result.Message);
+        }
         return Ok(result);
     }
     
