@@ -8,6 +8,7 @@ using PayCoreFinalProject.Service.EmailService.Abstract;
 using PayCoreFinalProject.Service.RabbitMQ.Abstract;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Serilog;
 
 namespace PayCoreFinalProject.Service.RabbitMQ.Concrete;
 
@@ -18,6 +19,7 @@ public class RabbitMQConsumer : IRabbitMQConsumer
     protected readonly IHibernateRepository<Email> _emailHibernateRepository;
     protected readonly RabbitMqSettings _rabbitMqSettings;
     protected readonly IEmailService _emailService;
+    protected readonly ITransaction _transaction;
     public RabbitMQConsumer(IOptionsMonitor<EmailSettings> emailSettings,ISession session, IOptionsMonitor<RabbitMqSettings> rabbitMqSettings, IEmailService emailService)
     {
         _session = session;
@@ -50,7 +52,7 @@ public class RabbitMQConsumer : IRabbitMQConsumer
         channel.QueueDeclare("EmailQueue", exclusive: false);
 
         var consumer = new EventingBasicConsumer(channel);
-
+        Email saveEmail = null;
         consumer.Received += async (model, eventArgs) =>
         {
             var body = eventArgs.Body.ToArray();
@@ -68,10 +70,12 @@ public class RabbitMQConsumer : IRabbitMQConsumer
 
             };
             await _emailService.SendEmail(email);
-            _emailService.SaveEmail(email);
         };
+        
         channel.BasicConsume(queue: "EmailQueue", autoAck: true, consumer: consumer);
         
+
+
         return Task.CompletedTask;
     }
 }

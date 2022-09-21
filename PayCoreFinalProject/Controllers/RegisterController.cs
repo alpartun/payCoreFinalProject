@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using PayCoreFinalProject.Data.Model;
 using PayCoreFinalProject.Dto;
+using PayCoreFinalProject.Service.EmailService.Abstract;
 using PayCoreFinalProject.Service.RabbitMQ.Abstract;
 using PayCoreFinalProject.Service.RegisterService.Abstract;
 
@@ -13,13 +14,14 @@ public class RegisterController : ControllerBase
     protected readonly IRegisterService _register;
     protected readonly IRabbitMQProducer _rabbitMqProducer;
     protected readonly IRabbitMQConsumer _rabbitMqConsumer;
+    protected readonly IEmailService _emailService;
 
-    public RegisterController(IRegisterService register,IRabbitMQProducer rabbitMqProducer, IRabbitMQConsumer rabbitMqConsumer)
+    public RegisterController(IRegisterService register,IRabbitMQProducer rabbitMqProducer, IRabbitMQConsumer rabbitMqConsumer, IEmailService emailService)
     {
         _register = register;
         _rabbitMqProducer = rabbitMqProducer;
         _rabbitMqConsumer = rabbitMqConsumer;
-
+        _emailService = emailService;
     }
     
     // Register operation
@@ -44,6 +46,11 @@ public class RegisterController : ControllerBase
         
          _rabbitMqProducer.Produce(email);
         await _rabbitMqConsumer.Consume();
+        email.SendTime = DateTime.Now;
+        email.IsSent = true;
+        _emailService.Save(email);
+        
+        
         return Ok(result);
     }
     private int GetCurrentUserId()

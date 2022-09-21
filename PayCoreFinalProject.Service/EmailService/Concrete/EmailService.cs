@@ -61,11 +61,13 @@ public class EmailService : IEmailService
  
             }
             
+            
         }));
-
+        
     }
 
-    public void SaveEmail(Email email)
+
+    public void Save(Email email)
     {
         try
         {
@@ -73,16 +75,16 @@ public class EmailService : IEmailService
             _emailHibernateRepository.Save(email);
             _emailHibernateRepository.Commit();
             _emailHibernateRepository.CloseTransaction();
-            
+
         }
         catch (Exception e)
         {
-            Log.Error("EmailService.SaveEmail",e); 
             _emailHibernateRepository.Rollback();
             _emailHibernateRepository.CloseTransaction();
+            Log.Error("EmailService.Save",e);
         }
-        
     }
+    
 }
 
 public class EmailNotSendException : Exception
