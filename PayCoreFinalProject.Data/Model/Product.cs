@@ -6,7 +6,7 @@ public class Product
     public virtual string Name { get; set; }
     public virtual string Color { get; set; }
     public virtual string Brand { get; set; }
-    public virtual double Price { get; set; }
+    public virtual decimal Price { get; set; }
     public virtual string Description { get; set; }
     public virtual bool IsOfferable { get; set; }
     public virtual bool IsSold { get; set; } = false;

@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json.Nodes;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using PayCoreFinalProject.Data.Model;
 using PayCoreFinalProject.Service.RabbitMQ.Abstract;
@@ -9,7 +10,8 @@ namespace PayCoreFinalProject.Service.RabbitMQ.Concrete;
 
 public class RabbitMQProducer : IRabbitMQProducer
 {
-    public void SendEmail(Email email)
+
+    public async Task Produce(Email email)
     {
         var factory = new ConnectionFactory
         {
@@ -22,7 +24,7 @@ public class RabbitMQProducer : IRabbitMQProducer
 
         using var channel = connectioon.CreateModel();
 
-        channel.QueueDeclare("EmailQueue", exclusive: false);
+         channel.QueueDeclare("EmailQueue", exclusive: false);
 
         var json = JsonConvert.SerializeObject(email);
         var body = Encoding.UTF8.GetBytes(json);

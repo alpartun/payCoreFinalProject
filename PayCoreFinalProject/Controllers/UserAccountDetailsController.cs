@@ -22,7 +22,7 @@ public class UserAccountDetailsController : ControllerBase
     }
     
     // Get Users spesific offer using id
-    [HttpGet("GetOffer/{id}")]
+    [HttpGet("Offer/{id}")]
     public IActionResult GetOfferById(int id)
     {
         var result = _offerService.GetById(id);
@@ -34,7 +34,7 @@ public class UserAccountDetailsController : ControllerBase
     }
 
     // all offers that user made
-    [HttpGet("GetAllOffers")]
+    [HttpGet("AllOffers")]
 
     public IActionResult GetAllMyOffers()
     {
@@ -49,7 +49,7 @@ public class UserAccountDetailsController : ControllerBase
         return Ok(result);
     }
     //get all offered products for that user
-    [HttpGet("GetAllOfferedProducts")]
+    [HttpGet("AllOfferedProducts")]
     public IActionResult GetAllMyOfferedProducts()
     {
         var currentUserId = GetCurrentUserId();
@@ -63,7 +63,7 @@ public class UserAccountDetailsController : ControllerBase
         
     }
     // get all products that user bought
-    [HttpGet("GetAllOrders")]
+    [HttpGet("AllOrders")]
     public IActionResult OrdersGetAll()
     {
         var currentUserId = GetCurrentUserId();
@@ -76,7 +76,7 @@ public class UserAccountDetailsController : ControllerBase
         return Ok(entity);
     }
     // get all products that user sold
-    [HttpGet("GetAllSoldProducts")]
+    [HttpGet("AllSoldProducts")]
     public IActionResult SoldProductsGetAll()
     {
         var currentUserId = GetCurrentUserId();
@@ -90,7 +90,7 @@ public class UserAccountDetailsController : ControllerBase
     }
     
     //user offer update 
-    [HttpPut("Offer/Update")]
+    [HttpPut("Offer")]
     public IActionResult UpdateOffer(OfferRequest offerRequest)
     {
         var currentUser = GetCurrentUserId();
@@ -103,7 +103,7 @@ public class UserAccountDetailsController : ControllerBase
         return Ok(entity.Message);
     }
     // user offer delete
-    [HttpDelete("Offer/Delete")]
+    [HttpDelete("Offer")]
     public IActionResult DeleteOffer(int offerId)
     {
         var result = _offerService.Remove(offerId);

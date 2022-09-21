@@ -20,27 +20,26 @@ public class ProductMap : ClassMapping<Product>
         
         Property(x=> x.Name, x =>
         {
-            x.Length(50);
+            x.Length(100);
             x.Type(NHibernateUtil.String);
             x.NotNullable(true);
         });
         
         Property(x=> x.Color, x =>
         {
-            x.Length(50);
             x.Type(NHibernateUtil.String);
             x.NotNullable(true);
         });
         Property(x=> x.Brand, x =>
         {
-            x.Length(50);
             x.Type(NHibernateUtil.String);
             x.NotNullable(true);
         });
         Property(x=> x.Price, x =>
         {
-            x.Type(NHibernateUtil.Double);
-            x.NotNullable(true);
+            x.Type(NHibernateUtil.Decimal);
+            x.Precision(10);
+            x.Scale(2);
         });
         Property(x=> x.Description, x =>
         {
@@ -49,13 +48,6 @@ public class ProductMap : ClassMapping<Product>
             x.NotNullable(true);
             
         });
-        Property(x=> x.Description, x =>
-        {
-            x.Length(500);
-            x.Type(NHibernateUtil.String);
-            x.NotNullable(true);
-            
-        });        
         Property(x=> x.IsOfferable, x =>
         {
             x.Type(NHibernateUtil.Boolean);
@@ -70,25 +62,13 @@ public class ProductMap : ClassMapping<Product>
         });
 
         ManyToOne(x=>x.User);
-        //ManyToOne(x=>x.User);
         ManyToOne(x=>x.Category);
         Bag<Offer>(x => x.Offers, c => {}, cr => cr.OneToMany(x => x.Class(typeof(Offer))));
         
         
         Table("product");
         
-    /*
-    public virtual int Id { get; set; }
-    public virtual string Name { get; set; }
-    public virtual string Color { get; set; }
-    public virtual string Brand { get; set; }
-    public virtual double Price { get; set; }
-    public virtual string Description { get; set; }
-    public virtual bool IsOfferable { get; set; }
-    public virtual bool IsSold { get; set; }
-    public virtual int CategoryId { get; set; }
-    public virtual int UserId { get; set; }
-    public virtual ICollection<Offer> Offers { get; set; }*/
+
     }
     
 }

@@ -1,30 +1,77 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.Text;
+using Newtonsoft.Json;
+using PayCoreFinalProject.Data.Model;
+using PayCoreFinalProject.Service.EmailService.Concrete;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
-var factory = new ConnectionFactory
+namespace PayCoreFinalProject.RabbitMQ.Consumer
 {
-    HostName = "localhost",
-    UserName = "guest",
-    Password = "guest"
-};
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build();            
 
-var connection = factory.CreateConnection();
+            Consume(config);
+        }
 
-using var channel = connection.CreateModel();
+        static void Consume(IConfiguration config)
+        {
+            var con = new EmailSettings
+            {
+                User = config.GetSection("Email")["User"],
+                From = config.GetSection("Email")["From"],
+                Pass = config.GetSection("Email")["Pass"],
+                Port = int.Parse(config.GetSection("Email")["Port"]),
+                RetryCount = int.Parse(config.GetSection("Email")["RetryCount"])
+            };
+            var factory = new ConnectionFactory
+            {
+                HostName = config.GetSection("RabbitMQ")["HostName"],
+                UserName = config.GetSection("RabbitMQ")["UserName"],
+                Password = config.GetSection("RabbitMQ")["Password"]
+            };
 
-channel.QueueDeclare("EmailQueue",exclusive:false);
+            var connection = factory.CreateConnection();
 
-var consumer = new EventingBasicConsumer(channel);
+            using var channel = connection.CreateModel();
 
-consumer.Received += (model, eventArgs) =>
-{
-    var body = eventArgs.Body.ToArray();
-    var message = Encoding.UTF8.GetString(body);
-    Console.WriteLine($" Message received: {message}");
-};
+            channel.QueueDeclare("EmailQueue", exclusive: false);
 
-channel.BasicConsume(queue:"EmailQueue",autoAck:true,consumer:consumer);
-Console.ReadKey();
+            var consumer = new EventingBasicConsumer(channel);
+
+            consumer.Received += async (model, eventArgs) =>
+            {
+                var body = eventArgs.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+                Console.WriteLine($" Message received: {message}");
+
+                var text = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
+                var result = JsonConvert.DeserializeObject<Email>(text);
+                EmailService mailSender = new EmailService(con);
+                var email = new Email
+                {
+                    EmailAdress = result.EmailAdress,
+                    EmailMessage = result.EmailMessage,
+                    EmailTitle = result.EmailTitle,
+                    IsSent = result.IsSent
+
+                };
+                await mailSender.SendEmail(email);
+            };
+            channel.BasicConsume(queue: "EmailQueue", autoAck: true, consumer: consumer);
+            Console.ReadKey();
+        }
+
+
+    }
+}
+
+

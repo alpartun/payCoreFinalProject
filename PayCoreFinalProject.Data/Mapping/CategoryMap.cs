@@ -22,7 +22,6 @@ public class CategoryMap : ClassMapping<Category>
         
         Property(x=> x.Name, x =>
         {
-            x.Length(50);
             x.Type(NHibernateUtil.String);
             x.NotNullable(true);
         });

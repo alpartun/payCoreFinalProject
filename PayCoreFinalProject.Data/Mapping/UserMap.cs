@@ -20,32 +20,27 @@ public class UserMap : ClassMapping<User>
         
         Property(x=> x.Name, x =>
         {
-            x.Length(50);
             x.Type(NHibernateUtil.String);
             x.NotNullable(true);
         });
         
         Property(x=> x.Surname, x =>
         {
-            x.Length(50);
             x.Type(NHibernateUtil.String);
             x.NotNullable(true);
         });
         Property(x=> x.Email, x =>
         {
-            x.Length(50);
             x.Type(NHibernateUtil.String);
             x.NotNullable(true);
         });
         Property(x=> x.PasswordHash, x =>
         {
-            x.Length(50);
             x.Type(NHibernateUtil.BinaryBlob);
             x.NotNullable(true);
         });
         Property(x=> x.PasswordSalt, x =>
         {
-            x.Length(50);
             x.Type(NHibernateUtil.BinaryBlob);
             x.NotNullable(true);
             

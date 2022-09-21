@@ -8,11 +8,11 @@ namespace PayCoreFinalProject.Service.OfferService.Abstract;
 
 public interface IOfferService : IBaseService<OfferDto,Offer>
 {
-    public BaseResponse<Offer> SendOffer(int productId, double price,int currentUserId);
+    public Task<BaseResponse<Offer>> SendOffer(int productId, decimal price, int currentUserId);
     public BaseResponse<Offer> AcceptOffer(int offerId, int currentUser);
     public BaseResponse<Offer> RejectOffer(int offerId, int currentUser);
 
-    public BaseResponse<Offer> Order(int productId, int currentUserId);
+    public Task<BaseResponse<Offer>> Order(int productId, int currentUserId);
     public BaseResponse<IEnumerable<OfferResponse>> GetAllMyOffers(int currentUserId);
     public BaseResponse<IEnumerable<OfferResponse>> OrdersGetAll(int currentUserId);
     public BaseResponse<IEnumerable<OfferResponse>> SoldProductsGetAll(int currentUserId);

@@ -20,8 +20,10 @@ public class OfferMap : ClassMapping<Offer>
         
         Property(x=> x.OfferedPrice, x =>
         {
-            x.Type(NHibernateUtil.Double);
-            x.NotNullable(true);
+            x.Type(NHibernateUtil.Decimal);
+            x.Precision(10);
+            x.Scale(2);
+            
         });
         Property(x=> x.OfferedById, x =>
         {
@@ -30,10 +32,6 @@ public class OfferMap : ClassMapping<Offer>
         });
         ManyToOne(x=>x.User);
         ManyToOne(x=>x.Product);
-        //    public virtual int Id { get; set; }
-        //public virtual int UserId { get; set; }
-        //public virtual double OfferedPrice { get; set; }
-        //public virtual int OfferedById { get; set; }
-        //
+
     }
 }

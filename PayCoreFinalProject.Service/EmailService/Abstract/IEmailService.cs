@@ -1,6 +1,9 @@
+using PayCoreFinalProject.Data.Model;
+
+
 namespace PayCoreFinalProject.Service.EmailService.Abstract;
 
-public interface IEmailService
+public interface IEmailService 
 {
-    
+    Task SendEmail(Email email);
 }

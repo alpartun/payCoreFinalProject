@@ -8,10 +8,12 @@ using ISession = NHibernate.ISession;
 
 namespace PayCoreFinalProject.Controllers;
 [Authorize]
+[NonController]
 [ApiController]
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
+    // This controller for admin and we have no roles right now.
     protected readonly IUserService _userService;
 
     public UserController(ISession session,IUserService userService)

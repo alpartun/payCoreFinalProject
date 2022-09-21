@@ -4,6 +4,6 @@ namespace PayCoreFinalProject.Service.RabbitMQ.Abstract;
 
 public interface IRabbitMQProducer
 {
-    public void SendEmail(Email email);
+    public Task Produce(Email email);
 }
 

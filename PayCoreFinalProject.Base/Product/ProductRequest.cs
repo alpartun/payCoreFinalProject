@@ -7,7 +7,7 @@ public class ProductRequest
     [Required]
     public  int CategoryId { get; set; }
     [Required]
-
+    [StringLength(maximumLength:20)]
     public  string Name { get; set; }
     [Required]
 
@@ -17,11 +17,12 @@ public class ProductRequest
     public  string Brand { get; set; }
     [Required]
 
-    public  double Price { get; set; }
+    public  decimal Price { get; set; }
     [Required]
 
     public  bool IsOfferable { get; set; }
     [Required]
+    [StringLength(maximumLength:500)]
 
     public  string Description { get; set; }
 }

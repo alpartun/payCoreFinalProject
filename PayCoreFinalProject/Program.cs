@@ -1,5 +1,7 @@
 ﻿using System.Configuration;
 using PayCoreFinalProject.Base.Jwt;
+using PayCoreFinalProject.Data.Model;
+using PayCoreFinalProject.Service.EmailService.Concrete;
 using PayCoreFinalProject.StartUpExtension;
 using Serilog;
 
@@ -45,7 +47,12 @@ builder.Services.AddNHibernatePostgreSql(builder.Configuration.GetConnectionStri
 
 MyOptions.JwtConfig = builder.Configuration.GetSection("JwtConfig").Get<JwtConfig>();
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
-
+builder.Configuration.GetSection("Email").Get<EmailSettings>();
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection(EmailSettings.Email));
+builder.Configuration.GetSection("RabbitMq").Get<RabbitMqSettings>();
+builder.Services.Configure<RabbitMqSettings>(
+    builder.Configuration.GetSection(RabbitMqSettings.RabbitMq));
 
 builder.Services.AddServices();
 builder.Services.AddJwtBearerAuthentication();

@@ -60,7 +60,7 @@ public class ProductDetailsController : Controller
         return Ok(results);
     }
     // get offer able products using specific category 
-    [HttpGet("GetOfferableByCategory/{id:int}")]
+    [HttpGet("OfferableByCategory/{id:int}")]
     public IActionResult OfferableProductsByCategoryId(int id)
     {
         var currentUserId = GetCurrentUserId();
@@ -72,19 +72,19 @@ public class ProductDetailsController : Controller
         return Ok(result);
     }
         
-    [HttpPost("Create")]
+    [HttpPost()]
     public IActionResult Create(ProductRequest productRequest)
     {
         var currentUserId = GetCurrentUserId();
         var entity = _productService.Create(productRequest, currentUserId);
-        if (entity.Success == false)
+        if (entity.Result.Success == false)
         {
-            return BadRequest(entity.Message);
+            return BadRequest(entity.Result.Message);
         }
-        return Ok(entity.Message);
+        return Ok(entity.Result.Message);
     }
     
-    [HttpPut("Edit")]
+    [HttpPut()]
     public IActionResult Edit(int productId,ProductSpecialRequest productRequest)
     {
         var currentUserId = GetCurrentUserId();
@@ -97,7 +97,7 @@ public class ProductDetailsController : Controller
         return Ok(entity.Message);
     }
 
-    [HttpDelete("Delete")]
+    [HttpDelete()]
     public IActionResult Delete(int id)
     {
         var entity = _productService.Remove(id);
@@ -116,26 +116,26 @@ public class ProductDetailsController : Controller
         
         // order is an offer so this one goes to OfferService.
         var result = _offerService.Order(productId, currentUserId);
-        if (result.Success == false)
+        if (result.Result.Success == false)
         {
-            return BadRequest(result.Message);
+            return BadRequest(result.Result.Message);
         }
 
-        return Ok(result.Message);
+        return Ok(result.Result.Message);
     }
     // offer to product
     [HttpPost("SendOffer")]
-    public IActionResult SendOffer(int productId, double price)
+    public IActionResult SendOffer(int productId, decimal price)
     {
         var currentUserId = GetCurrentUserId();
         
         // SendOffer is in OfferService.
         var result = _offerService.SendOffer(productId, price, currentUserId);
-        if (result.Success == false)
+        if (result.Result.Success == false)
         {
-            return BadRequest(result.Message);
+            return BadRequest(result.Result.Message);
         }
-        return Ok(result.Message);
+        return Ok(result.Result.Message);
 
     }
     

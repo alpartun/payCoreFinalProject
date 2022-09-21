@@ -7,7 +7,9 @@ using PayCoreFinalProject.Data.Model;
 using PayCoreFinalProject.Data.Repository;
 using PayCoreFinalProject.Dto;
 using PayCoreFinalProject.Service.Base.Concrete;
+using PayCoreFinalProject.Service.EmailService.Abstract;
 using PayCoreFinalProject.Service.ProductService.Abstract;
+using PayCoreFinalProject.Service.RabbitMQ.Abstract;
 using Serilog;
 
 namespace PayCoreFinalProject.Service.ProductService.Concrete;
@@ -17,23 +19,25 @@ public class ProductService : BaseService<ProductDto,Product>, IProductService
     protected readonly ISession _session;
     protected readonly IMapper _mapper;
 
-    protected readonly IHttpContextAccessor _context;
+    protected readonly IRabbitMQProducer _rabbitMqProducer;
+
     protected readonly IHibernateRepository<Product> _hibernateRepository;
     protected readonly IHibernateRepository<User> _userHibernateRepository;
     protected readonly IHibernateRepository<Category> _categoryHibernateRepository;
     protected readonly IHibernateRepository<Offer> _offerHibernateRepository;
     //injections
-    public ProductService(ISession session, IMapper mapper) : base(session, mapper)
+    public ProductService(ISession session, IMapper mapper, IRabbitMQProducer rabbitMqProducer) : base(session, mapper)
     {
         _session = session;
         _mapper = mapper;
+        _rabbitMqProducer = rabbitMqProducer;
         _hibernateRepository = new HibernateRepository<Product>(session);
         _userHibernateRepository = new HibernateRepository<User>(session);
         _categoryHibernateRepository = new HibernateRepository<Category>(session);
         _offerHibernateRepository = new HibernateRepository<Offer>(session);
     }
 
-    public BaseResponse<ProductResponse> Create(ProductRequest productRequest, int currentUserId)
+    public async Task<BaseResponse<ProductResponse>> Create(ProductRequest productRequest, int currentUserId)
     {
         //map operation ProductRequest -> Product, using productRequest
         var entity = _mapper.Map<ProductRequest, Product>(productRequest);
@@ -54,6 +58,21 @@ public class ProductService : BaseService<ProductDto,Product>, IProductService
             _hibernateRepository.Commit();
             _hibernateRepository.CloseTransaction();
             var result = _mapper.Map<Product,ProductResponse>(entity);
+
+
+            var productCreatedEmailToProductOwner = new Email
+            {
+                EmailAdress = user.Email,
+                EmailTitle = "New Product",
+                EmailMessage = $"Your product is listed.\n" +
+                               $"Product Name : {entity.Name}\n" +
+                               $"Product Category : {entity.Category.Name}\n" +
+                               $"Product Brand : {entity.Brand}\n" +
+                               $"Product Price : {entity.Price}\n" +
+                               $"Product Description : {entity.Description}\n"
+            };
+            await _rabbitMqProducer.Produce(productCreatedEmailToProductOwner);
+            
             return new BaseResponse<ProductResponse>(result);
 
         }
@@ -173,7 +192,7 @@ public class ProductService : BaseService<ProductDto,Product>, IProductService
     public BaseResponse<IEnumerable<ProductResponse>>  OfferableProducts(int id)
     {
         // get products that user can offer
-        var offerableProducts = _hibernateRepository.Entities.Where(x => x.IsOfferable != false && x.User.Id !=id );
+        var offerableProducts = _hibernateRepository.Entities.Where(x => x.IsOfferable != false && x.User.Id !=id && x.IsSold!=true);
         //check offerableProducts is null or not
         if (offerableProducts is null)
         {

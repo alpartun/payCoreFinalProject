@@ -19,7 +19,7 @@ public class CategoryDetailsController : ControllerBase
 
     }
     // get all categories
-    [HttpGet("Category/GetAll")]
+    [HttpGet("Category/All")]
     public IActionResult GetAll()
     {
         var results = _category.GetAllCategories();
@@ -44,7 +44,7 @@ public class CategoryDetailsController : ControllerBase
         return Ok(result);
     }
     // create category
-    [HttpPost("Category/Create")]
+    [HttpPost("Category")]
     public IActionResult Create(CategoryRequest categoryRequest)
     {
         var result = _category.Create(categoryRequest);
@@ -57,7 +57,7 @@ public class CategoryDetailsController : ControllerBase
 
     }
     // edit category
-    [HttpPut("Category/Edit")]
+    [HttpPut("Category")]
     public IActionResult Update(int id, CategoryRequest categoryRequest)
     {
         var entity = _category.Edit(id, categoryRequest);
@@ -68,7 +68,7 @@ public class CategoryDetailsController : ControllerBase
         return Ok(entity);
     }
     // delete category
-    [HttpDelete("Category/Delete/{id}")]
+    [HttpDelete("Category/{id}")]
     public IActionResult Delete(int id)
     {
         var currentUserId = GetCurrentUserId();
