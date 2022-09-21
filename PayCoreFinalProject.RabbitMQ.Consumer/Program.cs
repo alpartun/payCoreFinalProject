@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿/*// See https://aka.ms/new-console-template for more information
 
 using System.Text;
 using Newtonsoft.Json;
@@ -55,7 +55,7 @@ namespace PayCoreFinalProject.RabbitMQ.Consumer
 
                 var text = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
                 var result = JsonConvert.DeserializeObject<Email>(text);
-                EmailService mailSender = new EmailService(con);
+                EmailService mailSender = new EmailService();
                 var email = new Email
                 {
                     EmailAdress = result.EmailAdress,
@@ -72,6 +72,6 @@ namespace PayCoreFinalProject.RabbitMQ.Consumer
 
 
     }
-}
+}*/
 
 

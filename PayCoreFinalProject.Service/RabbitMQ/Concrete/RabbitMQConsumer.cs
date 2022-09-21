@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using NHibernate;
 using PayCoreFinalProject.Data.Model;
 using PayCoreFinalProject.Data.Repository;
+using PayCoreFinalProject.Service.EmailService.Abstract;
 using PayCoreFinalProject.Service.RabbitMQ.Abstract;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -16,9 +17,11 @@ public class RabbitMQConsumer : IRabbitMQConsumer
     protected readonly ISession _session;
     protected readonly IHibernateRepository<Email> _emailHibernateRepository;
     protected readonly RabbitMqSettings _rabbitMqSettings;
-    public RabbitMQConsumer(IOptionsMonitor<EmailSettings> emailSettings,ISession session, IOptionsMonitor<RabbitMqSettings> rabbitMqSettings)
+    protected readonly IEmailService _emailService;
+    public RabbitMQConsumer(IOptionsMonitor<EmailSettings> emailSettings,ISession session, IOptionsMonitor<RabbitMqSettings> rabbitMqSettings, IEmailService emailService)
     {
         _session = session;
+        _emailService = emailService;
         _emailSettings = emailSettings.CurrentValue;
         _rabbitMqSettings = rabbitMqSettings.CurrentValue;
         _emailHibernateRepository = new HibernateRepository<Email>(session);
@@ -56,7 +59,6 @@ public class RabbitMQConsumer : IRabbitMQConsumer
 
             var text = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
             var result = JsonConvert.DeserializeObject<Email>(text);
-            var mailSender = new EmailService.Concrete.EmailService(con);
             var email = new Email
             {
                 EmailAdress = result.EmailAdress,
@@ -65,7 +67,7 @@ public class RabbitMQConsumer : IRabbitMQConsumer
                 IsSent = result.IsSent
 
             };
-            await mailSender.SendEmail(email);
+            await _emailService.SendEmail(email);
         };
         channel.BasicConsume(queue: "EmailQueue", autoAck: true, consumer: consumer);
         
