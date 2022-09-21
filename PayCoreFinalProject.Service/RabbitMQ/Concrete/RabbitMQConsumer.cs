@@ -68,6 +68,7 @@ public class RabbitMQConsumer : IRabbitMQConsumer
 
             };
             await _emailService.SendEmail(email);
+            _emailService.SaveEmail(email);
         };
         channel.BasicConsume(queue: "EmailQueue", autoAck: true, consumer: consumer);
         
