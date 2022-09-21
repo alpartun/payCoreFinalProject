@@ -6,4 +6,3 @@ public interface IRabbitMQProducer
 {
     public Task Produce(Email email);
 }
-

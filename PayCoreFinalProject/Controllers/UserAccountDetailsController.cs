@@ -7,20 +7,23 @@ using PayCoreFinalProject.Service.OfferService.Abstract;
 using PayCoreFinalProject.Service.ProductService.Abstract;
 
 namespace PayCoreFinalProject.Controllers;
+
 [Authorize] // Authorize attribute for controller, if user not authorize then can not be able to access that controller methods
 [ApiController]
 [Route("api/[controller]/User")]
 public class UserAccountDetailsController : ControllerBase
 {
     protected readonly IOfferService _offerService;
+
     protected readonly IProductService _productService;
+
     // injection
     public UserAccountDetailsController(IOfferService offerService, IProductService productService)
     {
         _offerService = offerService;
         _productService = productService;
     }
-    
+
     // Get Users spesific offer using id
     [HttpGet("Offer/{id}")]
     public IActionResult GetOfferById(int id)
@@ -30,12 +33,12 @@ public class UserAccountDetailsController : ControllerBase
         {
             return BadRequest(result.Message);
         }
+
         return Ok(result);
     }
 
     // all offers that user made
     [HttpGet("AllOffers")]
-
     public IActionResult GetAllMyOffers()
     {
         //get current id method and returns userId claim
@@ -48,6 +51,7 @@ public class UserAccountDetailsController : ControllerBase
 
         return Ok(result);
     }
+
     //get all offered products for that user
     [HttpGet("AllOfferedProducts")]
     public IActionResult GetAllMyOfferedProducts()
@@ -60,8 +64,8 @@ public class UserAccountDetailsController : ControllerBase
         }
 
         return Ok(result);
-        
     }
+
     // get all products that user bought
     [HttpGet("AllOrders")]
     public IActionResult OrdersGetAll()
@@ -75,6 +79,7 @@ public class UserAccountDetailsController : ControllerBase
 
         return Ok(entity);
     }
+
     // get all products that user sold
     [HttpGet("AllSoldProducts")]
     public IActionResult SoldProductsGetAll()
@@ -88,7 +93,7 @@ public class UserAccountDetailsController : ControllerBase
 
         return Ok(entity);
     }
-    
+
     //user offer update 
     [HttpPut("Offer")]
     public IActionResult UpdateOffer(OfferRequest offerRequest)
@@ -102,6 +107,7 @@ public class UserAccountDetailsController : ControllerBase
 
         return Ok(entity.Message);
     }
+
     // user offer delete
     [HttpDelete("Offer")]
     public IActionResult DeleteOffer(int offerId)
@@ -114,12 +120,11 @@ public class UserAccountDetailsController : ControllerBase
 
         return Ok(result.Message);
     }
-    
+
     private int GetCurrentUserId()
     {
         ClaimsPrincipal currentUser = this.User;
         var currentUserId = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
         return currentUserId;
     }
-    
 }

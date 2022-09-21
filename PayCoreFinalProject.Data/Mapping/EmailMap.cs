@@ -15,40 +15,37 @@ public class EmailMap : ClassMapping<Email>
             x.Column("Id");
             x.UnsavedValue(0);
             x.Generator(Generators.Increment);
+        });
 
-        });
-        
-        Property(x=> x.EmailAdress, x =>
-        {
-            x.Type(NHibernateUtil.String);
-            x.NotNullable(true);
-        });
-        
-        Property(x=> x.EmailMessage, x =>
-        {
-            x.Type(NHibernateUtil.String);
-            x.NotNullable(true);
-        });
-        Property(x=> x.EmailTitle, x =>
+        Property(x => x.EmailAdress, x =>
         {
             x.Type(NHibernateUtil.String);
             x.NotNullable(true);
         });
 
-        Property(x=> x.CreatedTime, x =>
+        Property(x => x.EmailMessage, x =>
         {
-            x.Type(NHibernateUtil.DateTime);
+            x.Type(NHibernateUtil.String);
             x.NotNullable(true);
-            
         });
-        Property(x=> x.SendTime, x =>
+        Property(x => x.EmailTitle, x =>
+        {
+            x.Type(NHibernateUtil.String);
+            x.NotNullable(true);
+        });
+
+        Property(x => x.CreatedTime, x =>
         {
             x.Type(NHibernateUtil.DateTime);
             x.NotNullable(true);
-            
-        });        
-      
-        Property(x=> x.IsSent, x =>
+        });
+        Property(x => x.SendTime, x =>
+        {
+            x.Type(NHibernateUtil.DateTime);
+            x.NotNullable(true);
+        });
+
+        Property(x => x.IsSent, x =>
         {
             x.Type(NHibernateUtil.Boolean);
             x.NotNullable(true);

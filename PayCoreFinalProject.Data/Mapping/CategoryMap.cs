@@ -10,24 +10,21 @@ public class CategoryMap : ClassMapping<Category>
     public CategoryMap()
     {
         Table("category");
-        
+
         Id(x => x.Id, x =>
         {
             x.Type(NHibernateUtil.Int32);
             x.Column("Id");
             x.UnsavedValue(0);
             x.Generator(Generators.Increment);
-
         });
-        
-        Property(x=> x.Name, x =>
+
+        Property(x => x.Name, x =>
         {
             x.Type(NHibernateUtil.String);
             x.NotNullable(true);
         });
-        
-        Bag<Product>(x => x.Products, c => { }, cr => cr.OneToMany(x => x.Class(typeof(Product))));
 
+        Bag<Product>(x => x.Products, c => { }, cr => cr.OneToMany(x => x.Class(typeof(Product))));
     }
-    
 }

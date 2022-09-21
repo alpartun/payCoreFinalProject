@@ -19,17 +19,18 @@ public class TokenService : ITokenService
 {
     protected readonly ISession _session;
     protected readonly IHibernateRepository<User> _hibernateRepository;
+
     private readonly JwtConfig _jwtConfig;
     //injections
 
-    public TokenService(ISession session,IOptionsMonitor<JwtConfig> jwtConfig)
+    public TokenService(ISession session, IOptionsMonitor<JwtConfig> jwtConfig)
     {
         _session = session;
         _jwtConfig = jwtConfig.CurrentValue;
         _hibernateRepository = new HibernateRepository<User>(session);
     }
-    
-    
+
+
     public BaseResponse<TokenResponse> GenerateToken(TokenRequest tokenRequest)
     {
         try
@@ -47,14 +48,14 @@ public class TokenService : ITokenService
             {
                 return new BaseResponse<TokenResponse>("Please validate your information that you provided.");
             }
-            
+
             //password check operation using VerifyPasswordHash method
 
             if (!VerifyPasswordHash(tokenRequest.Password, user.PasswordHash, user.PasswordSalt))
             {
                 return new BaseResponse<TokenResponse>("Email or Password is false.");
             }
-            
+
             // if everything is fine  then we can start generate token
             DateTime now = DateTime.UtcNow;
             string token = GetToken(user, now);
@@ -65,12 +66,11 @@ public class TokenService : ITokenService
                 ExpireTime = now.AddMinutes(_jwtConfig.AccessTokenExpiration),
                 Name = user.Name,
                 Surname = user.Surname,
-                SessionTimeInSecond = _jwtConfig.AccessTokenExpiration*60,
+                SessionTimeInSecond = _jwtConfig.AccessTokenExpiration * 60,
             };
-            
+
             // return token with properties. then we can use accesstoken to authorize using swagger
             return new BaseResponse<TokenResponse>(tokenResponse);
-
         }
         catch (Exception e)
         {
@@ -79,8 +79,8 @@ public class TokenService : ITokenService
 
             return new BaseResponse<TokenResponse>(e.Message);
         }
-        
     }
+
     // get token method
     private string GetToken(User user, DateTime now)
     {
@@ -101,7 +101,7 @@ public class TokenService : ITokenService
         var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
         return accessToken;
     }
-        
+
     // get claim
     private Claim[] GetClaims(User user)
     {
@@ -112,12 +112,10 @@ public class TokenService : ITokenService
             new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Surname, user.Surname),
             new Claim(ClaimTypes.Email, user.Email),
-
-
-
         };
         return claims;
     }
+
     //verify passwordhash
     private bool VerifyPasswordHash(string password, byte[] userPasswordHash, byte[] userPasswordSalt)
     {
@@ -134,7 +132,6 @@ public class TokenService : ITokenService
             }
 
             return true;
-
         }
     }
 }

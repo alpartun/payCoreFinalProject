@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace PayCoreFinalProject.Data.Repository;
 
-public interface IHibernateRepository<Entity> where Entity  : class
+public interface IHibernateRepository<Entity> where Entity : class
 {
     void BeginTransaction();
     void Commit();
@@ -15,11 +15,6 @@ public interface IHibernateRepository<Entity> where Entity  : class
     Entity GetById(int id);
     IEnumerable<Entity> Find(Expression<Func<Entity, bool>> expression);
     IEnumerable<Entity> Where(Expression<Func<Entity, bool>> where);
-    
+
     IQueryable<Entity> Entities { get; }
-
-
-
-
-
 }

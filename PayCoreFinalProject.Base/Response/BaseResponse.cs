@@ -13,7 +13,6 @@ public class BaseResponse<T>
         Data = default;
         Success = success;
         Message = success ? "Success" : "Fault";
-
     }
 
     public BaseResponse(string message)
@@ -31,7 +30,5 @@ public class BaseResponse<T>
         Success = true;
         Message = "Success";
         Data = data;
-
     }
-    
 }

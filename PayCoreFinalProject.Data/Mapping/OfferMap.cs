@@ -15,23 +15,20 @@ public class OfferMap : ClassMapping<Offer>
             x.Column("Id");
             x.UnsavedValue(0);
             x.Generator(Generators.Increment);
-
         });
-        
-        Property(x=> x.OfferedPrice, x =>
+
+        Property(x => x.OfferedPrice, x =>
         {
             x.Type(NHibernateUtil.Decimal);
             x.Precision(10);
             x.Scale(2);
-            
         });
-        Property(x=> x.OfferedById, x =>
+        Property(x => x.OfferedById, x =>
         {
             x.Type(NHibernateUtil.Int32);
             x.NotNullable(true);
         });
-        ManyToOne(x=>x.User);
-        ManyToOne(x=>x.Product);
-
+        ManyToOne(x => x.User);
+        ManyToOne(x => x.Product);
     }
 }

@@ -15,41 +15,38 @@ public class UserMap : ClassMapping<User>
             x.Column("Id");
             x.UnsavedValue(0);
             x.Generator(Generators.Increment);
+        });
 
-        });
-        
-        Property(x=> x.Name, x =>
+        Property(x => x.Name, x =>
         {
             x.Type(NHibernateUtil.String);
             x.NotNullable(true);
         });
-        
-        Property(x=> x.Surname, x =>
+
+        Property(x => x.Surname, x =>
         {
             x.Type(NHibernateUtil.String);
             x.NotNullable(true);
         });
-        Property(x=> x.Email, x =>
+        Property(x => x.Email, x =>
         {
             x.Type(NHibernateUtil.String);
             x.NotNullable(true);
         });
-        Property(x=> x.PasswordHash, x =>
+        Property(x => x.PasswordHash, x =>
         {
             x.Type(NHibernateUtil.BinaryBlob);
             x.NotNullable(true);
         });
-        Property(x=> x.PasswordSalt, x =>
+        Property(x => x.PasswordSalt, x =>
         {
             x.Type(NHibernateUtil.BinaryBlob);
             x.NotNullable(true);
-            
         });
         Bag<Product>(x => x.Products, c => { }, cr => cr.OneToMany(x => x.Class(typeof(Product))));
         Bag<Offer>(x => x.Offers, c => { }, cr => cr.OneToMany(x => x.Class(typeof(Offer))));
 
-        
+
         Table("user");
-        
     }
 }

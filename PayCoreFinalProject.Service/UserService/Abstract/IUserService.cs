@@ -4,8 +4,6 @@ using PayCoreFinalProject.Dto;
 
 namespace PayCoreFinalProject.Service.UserService.Abstract;
 
-public interface IUserService : IBaseService<UserDto,User>
+public interface IUserService : IBaseService<UserDto, User>
 {
-    
-    
 }

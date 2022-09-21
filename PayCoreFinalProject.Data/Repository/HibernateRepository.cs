@@ -11,8 +11,8 @@ public class HibernateRepository<Entity> : IHibernateRepository<Entity> where En
     public HibernateRepository(ISession session)
     {
         _session = session;
-
     }
+
     public void BeginTransaction()
     {
         _transaction = _session.BeginTransaction();
@@ -20,7 +20,7 @@ public class HibernateRepository<Entity> : IHibernateRepository<Entity> where En
 
     public void Commit()
     {
-        _transaction.Commit();    
+        _transaction.Commit();
     }
 
     public void Rollback()
@@ -71,9 +71,7 @@ public class HibernateRepository<Entity> : IHibernateRepository<Entity> where En
     public IEnumerable<Entity> Where(Expression<Func<Entity, bool>> where)
     {
         return _session.Query<Entity>().Where(where).AsQueryable();
-
     }
 
     public IQueryable<Entity> Entities => _session.Query<Entity>();
-
 }

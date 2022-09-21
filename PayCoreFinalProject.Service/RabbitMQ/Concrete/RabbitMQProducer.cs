@@ -10,7 +10,6 @@ namespace PayCoreFinalProject.Service.RabbitMQ.Concrete;
 
 public class RabbitMQProducer : IRabbitMQProducer
 {
-
     public async Task Produce(Email email)
     {
         var factory = new ConnectionFactory
@@ -24,15 +23,14 @@ public class RabbitMQProducer : IRabbitMQProducer
 
         using var channel = connectioon.CreateModel();
 
-         channel.QueueDeclare("EmailQueue", exclusive: false);
+        channel.QueueDeclare("EmailQueue", exclusive: false);
 
         var json = JsonConvert.SerializeObject(email);
         var body = Encoding.UTF8.GetBytes(json);
-        
-        channel.BasicPublish(
-            exchange:"",
-            routingKey:"EmailQueue",
-            body:body);
 
+        channel.BasicPublish(
+            exchange: "",
+            routingKey: "EmailQueue",
+            body: body);
     }
 }

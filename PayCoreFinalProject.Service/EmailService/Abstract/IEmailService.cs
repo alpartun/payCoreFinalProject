@@ -5,7 +5,7 @@ using PayCoreFinalProject.Data.Repository;
 
 namespace PayCoreFinalProject.Service.EmailService.Abstract;
 
-public interface IEmailService 
+public interface IEmailService
 {
     Task SendEmail(Email email);
     void Save(Email email);

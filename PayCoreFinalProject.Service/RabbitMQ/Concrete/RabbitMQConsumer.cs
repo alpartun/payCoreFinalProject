@@ -20,7 +20,9 @@ public class RabbitMQConsumer : IRabbitMQConsumer
     protected readonly RabbitMqSettings _rabbitMqSettings;
     protected readonly IEmailService _emailService;
     protected readonly ITransaction _transaction;
-    public RabbitMQConsumer(IOptionsMonitor<EmailSettings> emailSettings,ISession session, IOptionsMonitor<RabbitMqSettings> rabbitMqSettings, IEmailService emailService)
+
+    public RabbitMQConsumer(IOptionsMonitor<EmailSettings> emailSettings, ISession session,
+        IOptionsMonitor<RabbitMqSettings> rabbitMqSettings, IEmailService emailService)
     {
         _session = session;
         _emailService = emailService;
@@ -28,6 +30,7 @@ public class RabbitMQConsumer : IRabbitMQConsumer
         _rabbitMqSettings = rabbitMqSettings.CurrentValue;
         _emailHibernateRepository = new HibernateRepository<Email>(session);
     }
+
     public Task Consume()
     {
         var con = new EmailSettings
@@ -35,7 +38,7 @@ public class RabbitMQConsumer : IRabbitMQConsumer
             User = _emailSettings.User,
             From = _emailSettings.From,
             Pass = _emailSettings.Pass,
-            Port =  _emailSettings.Port,
+            Port = _emailSettings.Port,
             RetryCount = _emailSettings.RetryCount,
         };
         var factory = new ConnectionFactory
@@ -47,7 +50,7 @@ public class RabbitMQConsumer : IRabbitMQConsumer
 
         var connection = factory.CreateConnection();
 
-         var channel = connection.CreateModel();
+        var channel = connection.CreateModel();
 
         channel.QueueDeclare("EmailQueue", exclusive: false);
 
@@ -67,13 +70,11 @@ public class RabbitMQConsumer : IRabbitMQConsumer
                 EmailMessage = result.EmailMessage,
                 EmailTitle = result.EmailTitle,
                 IsSent = result.IsSent
-
             };
             await _emailService.SendEmail(email);
         };
-        
+
         channel.BasicConsume(queue: "EmailQueue", autoAck: true, consumer: consumer);
-        
 
 
         return Task.CompletedTask;

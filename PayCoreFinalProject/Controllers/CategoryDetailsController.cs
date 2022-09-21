@@ -6,6 +6,7 @@ using PayCoreFinalProject.Dto;
 using PayCoreFinalProject.Service.CategoryService.Abstract;
 
 namespace PayCoreFinalProject.Controllers;
+
 [Authorize]
 [ApiController]
 [Route("[controller]")]
@@ -16,8 +17,8 @@ public class CategoryDetailsController : ControllerBase
     public CategoryDetailsController(ICategoryService category)
     {
         _category = category;
-
     }
+
     // get all categories
     [HttpGet("Category/All")]
     public IActionResult GetAll()
@@ -30,9 +31,9 @@ public class CategoryDetailsController : ControllerBase
 
         return Ok(results);
     }
+
     // get specific category with categoryId
     [HttpGet("Category/{id}")]
-
     public IActionResult GetById(int id)
     {
         var result = _category.GetById(id);
@@ -43,6 +44,7 @@ public class CategoryDetailsController : ControllerBase
 
         return Ok(result);
     }
+
     // create category
     [HttpPost("Category")]
     public IActionResult Create(CategoryRequest categoryRequest)
@@ -54,8 +56,8 @@ public class CategoryDetailsController : ControllerBase
         }
 
         return Ok(result.Message);
-
     }
+
     // edit category
     [HttpPut("Category")]
     public IActionResult Update(int id, CategoryRequest categoryRequest)
@@ -65,14 +67,16 @@ public class CategoryDetailsController : ControllerBase
         {
             return BadRequest(entity.Message);
         }
+
         return Ok(entity);
     }
+
     // delete category
     [HttpDelete("Category/{id}")]
     public IActionResult Delete(int id)
     {
         var currentUserId = GetCurrentUserId();
-        var entity = _category.Delete(id,currentUserId);
+        var entity = _category.Delete(id, currentUserId);
         if (entity.Success == false)
         {
             return BadRequest(entity.Message);
@@ -80,12 +84,11 @@ public class CategoryDetailsController : ControllerBase
 
         return Ok(entity);
     }
+
     private int GetCurrentUserId()
     {
         ClaimsPrincipal currentUser = this.User;
         var currentUserId = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
         return currentUserId;
     }
-
-    
 }

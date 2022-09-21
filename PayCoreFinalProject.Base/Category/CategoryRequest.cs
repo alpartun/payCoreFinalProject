@@ -4,7 +4,5 @@ namespace PayCoreFinalProject.Base.Category;
 
 public class CategoryRequest
 {
-    [Required]
-    public string Name { get; set; }
-    
+    [Required] public string Name { get; set; }
 }

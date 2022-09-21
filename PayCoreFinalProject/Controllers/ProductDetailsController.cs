@@ -14,14 +14,16 @@ namespace PayCoreFinalProject.Controllers;
 public class ProductDetailsController : Controller
 {
     protected readonly IProductService _productService;
+
     protected readonly IOfferService _offerService;
+
     //injection
-    public ProductDetailsController(IProductService product,IOfferService offer)
+    public ProductDetailsController(IProductService product, IOfferService offer)
     {
         _offerService = offer;
         _productService = product;
     }
-    
+
     [HttpGet("GetAll")]
     public IActionResult GetAllProducts()
     {
@@ -33,11 +35,10 @@ public class ProductDetailsController : Controller
 
         return Ok(results);
     }
-    
+
     [HttpGet("Get/{id}")]
     public IActionResult GetProduct(int id)
     {
-
         var result = _productService.GetById(id);
         if (result.Success == false)
         {
@@ -46,6 +47,7 @@ public class ProductDetailsController : Controller
 
         return Ok(result);
     }
+
     // get offer able products
     [HttpGet("GetAllOfferableProducts")]
     public IActionResult OfferableProduct()
@@ -59,6 +61,7 @@ public class ProductDetailsController : Controller
 
         return Ok(results);
     }
+
     // get offer able products using specific category 
     [HttpGet("OfferableByCategory/{id:int}")]
     public IActionResult OfferableProductsByCategoryId(int id)
@@ -69,9 +72,10 @@ public class ProductDetailsController : Controller
         {
             return BadRequest(result.Message);
         }
+
         return Ok(result);
     }
-        
+
     [HttpPost()]
     public IActionResult Create(ProductRequest productRequest)
     {
@@ -81,19 +85,21 @@ public class ProductDetailsController : Controller
         {
             return BadRequest(entity.Result.Message);
         }
+
         return Ok(entity.Result.Message);
     }
-    
+
     [HttpPut()]
-    public IActionResult Edit(int productId,ProductSpecialRequest productRequest)
+    public IActionResult Edit(int productId, ProductSpecialRequest productRequest)
     {
         var currentUserId = GetCurrentUserId();
         productRequest.Id = productId;
-        var entity = _productService.Edit(productId,productRequest, currentUserId);
+        var entity = _productService.Edit(productId, productRequest, currentUserId);
         if (entity.Success == false)
         {
             return BadRequest(entity.Message);
         }
+
         return Ok(entity.Message);
     }
 
@@ -108,12 +114,13 @@ public class ProductDetailsController : Controller
 
         return Ok(entity);
     }
+
     // order product
     [HttpPost("Order")]
     public IActionResult Order(int productId)
     {
         var currentUserId = GetCurrentUserId();
-        
+
         // order is an offer so this one goes to OfferService.
         var result = _offerService.Order(productId, currentUserId);
         if (result.Result.Success == false)
@@ -123,22 +130,23 @@ public class ProductDetailsController : Controller
 
         return Ok(result.Result.Message);
     }
+
     // offer to product
     [HttpPost("SendOffer")]
     public IActionResult SendOffer(int productId, decimal price)
     {
         var currentUserId = GetCurrentUserId();
-        
+
         // SendOffer is in OfferService.
         var result = _offerService.SendOffer(productId, price, currentUserId);
         if (result.Result.Success == false)
         {
             return BadRequest(result.Result.Message);
         }
-        return Ok(result.Result.Message);
 
+        return Ok(result.Result.Message);
     }
-    
+
     // accept offer
     [HttpPost("Offer/Accept")]
     public IActionResult Accept(int offerId)
@@ -150,20 +158,23 @@ public class ProductDetailsController : Controller
         {
             return BadRequest(result.Message);
         }
+
         return Ok(result.Message);
     }
+
     // reject offer
     [HttpPost("Offer/Reject")]
     public IActionResult Reject(int offerId)
     {
         var currentUserId = GetCurrentUserId();
-        
+
         // RejectOffer is in OfferService.
         var result = _offerService.RejectOffer(offerId, currentUserId);
         if (result.Success == false)
         {
             return BadRequest(result.Message);
         }
+
         return Ok(result.Message);
     }
 
@@ -174,11 +185,4 @@ public class ProductDetailsController : Controller
         var currentUserId = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
         return currentUserId;
     }
-
-
-    
-    
-    
-    
-    
 }

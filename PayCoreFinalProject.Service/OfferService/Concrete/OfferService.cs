@@ -120,9 +120,10 @@ public class OfferService : BaseService<OfferDto, Offer>, IOfferService
             return new BaseResponse<Offer>("Product is not offerable.");
         }
 
-        if (product.Price < price || 0>price)
+        if (product.Price < price || 0 > price)
         {
-            return new BaseResponse<Offer>(message: "Offer can not be higher than product price or offer can not be lower than zero.");
+            return new BaseResponse<Offer>(
+                message: "Offer can not be higher than product price or offer can not be lower than zero.");
             ;
         }
 

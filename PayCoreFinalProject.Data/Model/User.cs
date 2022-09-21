@@ -11,11 +11,4 @@ public class User
 
     public virtual ICollection<Product> Products { get; set; }
     public virtual ICollection<Offer> Offers { get; set; }
-
-
-
-
-
-
-
 }

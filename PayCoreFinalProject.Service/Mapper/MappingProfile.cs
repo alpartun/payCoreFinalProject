@@ -19,10 +19,8 @@ public class MappingProfile : Profile
         
         CreateMap<Category, CategoryDto>().ReverseMap();
         CreateMap<Category, CategoryResponse>().ReverseMap();
-        CreateMap<Category, CategoryRequest>().ReverseMap();
+        CreateMap<Category, CategoryRequest>().ReverseMap(); 
         CreateMap<CategoryDto, CategoryResponse>().ReverseMap();
-        
-        
         
         
         CreateMap<Offer, OfferDto>().ReverseMap();
@@ -37,15 +35,6 @@ public class MappingProfile : Profile
         CreateMap<Product, ProductSpecialRequest>().ReverseMap();
 
 
-
-
-
-
-
-        /*CreateMap<UserDto, User>().ReverseMap();
-        CreateMap<UserDto, User>().ReverseMap();
-        CreateMap<UserDto, User>().ReverseMap();
-        CreateMap<UserDto, User>().ReverseMap();*/
 
     }
     

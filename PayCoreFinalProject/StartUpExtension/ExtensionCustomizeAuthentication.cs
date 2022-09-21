@@ -20,10 +20,10 @@ public static class ExtensionCustomizeAuthentication
             x.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true, // default True
-                ValidIssuer = MyOptions.JwtConfig.Issuer,
+                ValidIssuer = Options.JwtConfig.Issuer,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(MyOptions.JwtConfig.Secret)),
-                ValidAudience = MyOptions.JwtConfig.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Options.JwtConfig.Secret)),
+                ValidAudience = Options.JwtConfig.Audience,
                 ValidateAudience = true, // default True
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.FromMinutes(2)

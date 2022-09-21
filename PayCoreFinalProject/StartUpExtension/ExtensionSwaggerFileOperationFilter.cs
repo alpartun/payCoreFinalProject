@@ -8,7 +8,8 @@ public class ExtensionSwaggerFileOperationFilter : IOperationFilter
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         var fileUploadMime = "multipart/form-data";
-        if (operation.RequestBody == null || !operation.RequestBody.Content.Any(x => x.Key.Equals(fileUploadMime, StringComparison.InvariantCultureIgnoreCase)))
+        if (operation.RequestBody == null || !operation.RequestBody.Content.Any(x =>
+                x.Key.Equals(fileUploadMime, StringComparison.InvariantCultureIgnoreCase)))
             return;
 
         var fileParams = context.MethodInfo.GetParameters().Where(p => p.ParameterType == typeof(IFormFile));

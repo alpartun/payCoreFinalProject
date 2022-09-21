@@ -25,8 +25,8 @@ public class EmailService : IEmailService
         _session = session;
         _emailSettings = emailSettings.CurrentValue;
         _emailHibernateRepository = new HibernateRepository<Email>(session);
-
     }
+
     public async Task SendEmail(Email email)
     {
         var emailTransform = new MimeMessage();
@@ -41,9 +41,8 @@ public class EmailService : IEmailService
             smtp.Authenticate(_emailSettings.User, _emailSettings.Pass);
             email.SendTime = DateTime.Now;
 
-               await  smtp.SendAsync(emailTransform);
-               email.IsSent = true;
-
+            await smtp.SendAsync(emailTransform);
+            email.IsSent = true;
         }
 
         var retryPolicy = Policy
@@ -57,13 +56,9 @@ public class EmailService : IEmailService
                 smtp.Authenticate(_emailSettings.User, _emailSettings.Pass);
                 email.SendTime = DateTime.Now;
 
-                email.IsSent =  smtp.SendAsync(emailTransform).IsCompletedSuccessfully;
- 
+                email.IsSent = smtp.SendAsync(emailTransform).IsCompletedSuccessfully;
             }
-            
-            
         }));
-        
     }
 
 
@@ -75,19 +70,16 @@ public class EmailService : IEmailService
             _emailHibernateRepository.Save(email);
             _emailHibernateRepository.Commit();
             _emailHibernateRepository.CloseTransaction();
-
         }
         catch (Exception e)
         {
             _emailHibernateRepository.Rollback();
             _emailHibernateRepository.CloseTransaction();
-            Log.Error("EmailService.Save",e);
+            Log.Error("EmailService.Save", e);
         }
     }
-    
 }
 
 public class EmailNotSendException : Exception
 {
 }
-

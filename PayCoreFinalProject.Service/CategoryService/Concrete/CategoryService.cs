@@ -11,11 +11,13 @@ using Serilog;
 
 namespace PayCoreFinalProject.Service.CategoryService.Concrete;
 
-public class CategoryService : BaseService<CategoryDto,Category>,ICategoryService
+public class CategoryService : BaseService<CategoryDto, Category>, ICategoryService
 {
     protected readonly IHibernateRepository<Category> _hibernateRepository;
     protected readonly IHibernateRepository<Offer> _offerHibernateRepository;
+
     protected readonly IHibernateRepository<Product> _productHibernateRepository;
+
     //injections
     public CategoryService(ISession session, IMapper mapper) : base(session, mapper)
     {
@@ -34,6 +36,7 @@ public class CategoryService : BaseService<CategoryDto,Category>,ICategoryServic
         {
             return new BaseResponse<Category>("Failed");
         }
+
         try
         {
             // open transaction and save category
@@ -50,11 +53,11 @@ public class CategoryService : BaseService<CategoryDto,Category>,ICategoryServic
             // if something went wrong then rollback
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
-            
+
             return new BaseResponse<Category>(e.Message);
         }
-        
     }
+
     // Edit Category
     public BaseResponse<CategoryResponse> Edit(int id, CategoryRequest request)
     {
@@ -62,9 +65,9 @@ public class CategoryService : BaseService<CategoryDto,Category>,ICategoryServic
         {
             // get entity for edit some parts
             var tempEntity = _hibernateRepository.GetById(id);
-            
+
             // automapper operation and assign updated values to category object
-            var entity = _mapper.Map<CategoryRequest, Category>(request,tempEntity);
+            var entity = _mapper.Map<CategoryRequest, Category>(request, tempEntity);
             // then save to db
             _hibernateRepository.BeginTransaction();
             _hibernateRepository.Update(entity);
@@ -81,7 +84,6 @@ public class CategoryService : BaseService<CategoryDto,Category>,ICategoryServic
             _hibernateRepository.CloseTransaction();
             return new BaseResponse<CategoryResponse>(e.Message);
         }
-            
     }
 
     // Delete Category
@@ -93,7 +95,7 @@ public class CategoryService : BaseService<CategoryDto,Category>,ICategoryServic
 
         var deleteProducts = _productHibernateRepository.Entities.Where(x => x.Category.Id == deleteCategory.Id)
             .Select(x => x.Id);
-        
+
         // get affers which are belongs to selected products (and also category)
         var deleteOffers = _offerHibernateRepository.Entities.Where(x => x.Product.Category.Id == deleteCategory.Id)
             .Select(x => x.Id);
@@ -108,16 +110,18 @@ public class CategoryService : BaseService<CategoryDto,Category>,ICategoryServic
             {
                 _offerHibernateRepository.Delete(deleteOfferId);
             }
+
             foreach (var deleteProductId in deleteProducts)
             {
                 _productHibernateRepository.Delete(deleteProductId);
             }
+
             _hibernateRepository.Delete(deleteCategory.Id);
             _hibernateRepository.Commit();
             _hibernateRepository.CloseTransaction();
             _productHibernateRepository.CloseTransaction();
             _offerHibernateRepository.CloseTransaction();
-            return new BaseResponse<CategoryResponse>(success:true);
+            return new BaseResponse<CategoryResponse>(success: true);
         }
         catch (Exception e)
         {
@@ -132,13 +136,11 @@ public class CategoryService : BaseService<CategoryDto,Category>,ICategoryServic
 
             return new BaseResponse<CategoryResponse>(e.Message);
         }
-        
-        
     }
 
 
     // GetAll Categories
-    public BaseResponse<IEnumerable<CategoryResponse>>  GetAllCategories()
+    public BaseResponse<IEnumerable<CategoryResponse>> GetAllCategories()
     {
         //get all categories in db 
         var tempEntity = _hibernateRepository.Entities.ToList();
@@ -146,7 +148,6 @@ public class CategoryService : BaseService<CategoryDto,Category>,ICategoryServic
         var result = _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryResponse>>(tempEntity);
 
 
-        
         return new BaseResponse<IEnumerable<CategoryResponse>>(result);
     }
 }

@@ -6,6 +6,7 @@ namespace PayCoreFinalProject.Middleware;
 public class ErrorHandlerMiddleware
 {
     private readonly RequestDelegate _next;
+
     public ErrorHandlerMiddleware(RequestDelegate next)
     {
         _next = next;
@@ -16,7 +17,6 @@ public class ErrorHandlerMiddleware
         try
         {
             await _next.Invoke(context);
-
         }
         catch (Exception exception)
         {

@@ -7,18 +7,17 @@ using Serilog;
 
 namespace PayCoreFinalProject.Service.Base.Concrete;
 
-public abstract class BaseService<Dto,Entity> : IBaseService<Dto,Entity> where Entity : class
+public abstract class BaseService<Dto, Entity> : IBaseService<Dto, Entity> where Entity : class
 {
     protected readonly ISession _session;
     protected readonly IMapper _mapper;
     protected readonly IHibernateRepository<Entity> _hibernateRepository;
 
-    public BaseService(ISession session, IMapper mapper) :base()
+    public BaseService(ISession session, IMapper mapper) : base()
     {
         _session = session;
         _mapper = mapper;
         _hibernateRepository = new HibernateRepository<Entity>(session);
-
     }
 
     public virtual BaseResponse<Dto> GetById(int id)
@@ -31,10 +30,11 @@ public abstract class BaseService<Dto,Entity> : IBaseService<Dto,Entity> where E
             {
                 return new BaseResponse<Dto>($"{typeof(Entity)} not found.");
             }
+
             return new BaseResponse<Dto>(result);
         }
         catch (Exception e)
-        { 
+        {
             Log.Error("BaseService.GetById", e);
             return new BaseResponse<Dto>(e.Message);
         }
@@ -60,7 +60,7 @@ public abstract class BaseService<Dto,Entity> : IBaseService<Dto,Entity> where E
         try
         {
             var tempEntity = _mapper.Map<Dto, Entity>(insertResource);
-            
+
             _hibernateRepository.BeginTransaction();
             _hibernateRepository.Save(tempEntity);
             _hibernateRepository.Commit();
@@ -84,9 +84,10 @@ public abstract class BaseService<Dto,Entity> : IBaseService<Dto,Entity> where E
         {
             return new BaseResponse<Dto>("Record is not found.");
         }
-        var entity = _mapper.Map<Dto, Entity>(updateResource,tempEntity);
+
+        var entity = _mapper.Map<Dto, Entity>(updateResource, tempEntity);
         try
-        { 
+        {
             _hibernateRepository.BeginTransaction();
             _hibernateRepository.Update(entity);
             _hibernateRepository.Commit();
@@ -113,6 +114,7 @@ public abstract class BaseService<Dto,Entity> : IBaseService<Dto,Entity> where E
             {
                 new BaseResponse<Dto>("Record is not found.");
             }
+
             _hibernateRepository.BeginTransaction();
             _hibernateRepository.Delete(id);
             _hibernateRepository.Commit();
@@ -123,13 +125,12 @@ public abstract class BaseService<Dto,Entity> : IBaseService<Dto,Entity> where E
             return new BaseResponse<Dto>(result);
         }
         catch (Exception e)
-        { 
+        {
             Log.Error("BaseService.Remove", e);
 
             _hibernateRepository.Rollback();
             _hibernateRepository.CloseTransaction();
             return new BaseResponse<Dto>(e.Message);
         }
-
     }
 }

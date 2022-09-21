@@ -18,7 +18,7 @@ public static class ExtensionNHibernate
         var configuration = new Configuration();
         configuration.DataBaseIntegration(c =>
         {
-            c.Dialect<PostgreSQLDialect>(); 
+            c.Dialect<PostgreSQLDialect>();
             c.ConnectionString = connectionString;
             c.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             c.SchemaAction = SchemaAutoAction.Update;

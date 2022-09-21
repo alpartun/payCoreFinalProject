@@ -7,6 +7,7 @@ using PayCoreFinalProject.Service.RabbitMQ.Abstract;
 using PayCoreFinalProject.Service.RegisterService.Abstract;
 
 namespace PayCoreFinalProject.Controllers;
+
 [ApiController]
 [Route("[controller]")]
 public class RegisterController : ControllerBase
@@ -16,14 +17,15 @@ public class RegisterController : ControllerBase
     protected readonly IRabbitMQConsumer _rabbitMqConsumer;
     protected readonly IEmailService _emailService;
 
-    public RegisterController(IRegisterService register,IRabbitMQProducer rabbitMqProducer, IRabbitMQConsumer rabbitMqConsumer, IEmailService emailService)
+    public RegisterController(IRegisterService register, IRabbitMQProducer rabbitMqProducer,
+        IRabbitMQConsumer rabbitMqConsumer, IEmailService emailService)
     {
         _register = register;
         _rabbitMqProducer = rabbitMqProducer;
         _rabbitMqConsumer = rabbitMqConsumer;
         _emailService = emailService;
     }
-    
+
     // Register operation
     [HttpPost()]
     public async Task<IActionResult> Register([FromBody] UserRegisterDto userRegister)
@@ -43,26 +45,27 @@ public class RegisterController : ControllerBase
             EmailTitle = "Register Success",
             IsSent = true
         };
-        
-         _rabbitMqProducer.Produce(email);
+
+        _rabbitMqProducer.Produce(email);
         await _rabbitMqConsumer.Consume();
         email.SendTime = DateTime.Now;
         email.IsSent = true;
         _emailService.Save(email);
-        
-        
+
+
         return Ok(result);
     }
+
     private int GetCurrentUserId()
     {
         ClaimsPrincipal currentUser = this.User;
         var currentUserId = Int32.Parse(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value);
         return currentUserId;
-    }    private IEnumerable<Claim> GetCurrentUser()
+    }
+
+    private IEnumerable<Claim> GetCurrentUser()
     {
         ClaimsPrincipal currentUser = User;
         return User.Claims;
     }
-    
-    
 }

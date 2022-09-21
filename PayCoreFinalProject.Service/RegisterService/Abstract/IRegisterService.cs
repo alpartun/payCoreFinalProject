@@ -7,6 +7,4 @@ namespace PayCoreFinalProject.Service.RegisterService.Abstract;
 public interface IRegisterService
 {
     BaseResponse<UserResponse> Register(UserRegisterDto userRegisterDto);
-
-    
 }
